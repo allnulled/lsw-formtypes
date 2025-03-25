@@ -14,21 +14,28 @@ Vue.component("LswDurationControl", {
       value: this.settings?.initialValue || "",
       isEditable: true,
       isShowingDetails: false,
+      submitError: false,
+      validateError: false,
     };
   },
   methods: {
     async submit() {
-      this.$trace("lsw-duration-control.methods.submit");
-      return LswFormtypes.utils.submitControl.call(this);
-      
-    },
-    async submit() {
       this.$trace("lsw-text-control.methods.submit");
-      return LswFormtypes.utils.submitControl.call(this);
+      try {
+        return LswFormtypes.utils.submitControl.call(this);
+      } catch (error) {
+        this.submitError = error;
+        throw error;
+      }
     },
     validate() {
       this.$trace("lsw-text-control.methods.validateSettings");
-      return LswFormtypes.utils.validateControl.call(this);
+      try {
+        return LswFormtypes.utils.validateControl.call(this);
+      } catch (error) {
+        this.validateError = error;
+        throw error;
+      }
     },
     validateSettings() {
       this.$trace("lsw-text-control.methods.validateSettings");

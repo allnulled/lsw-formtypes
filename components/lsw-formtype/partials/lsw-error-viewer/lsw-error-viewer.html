@@ -1,0 +1,14 @@
+<div class="lsw_error_viewer">
+    <div class="" v-if="currentError">
+        <div class="position_absolute top_0" style="right: 20px;">
+            <div class="pad_1">
+                <button v-on:click="() => setError()">❎</button>
+            </div>
+        </div>
+        <div class="box_error_content">
+            <div class="errorMessage">
+                {{ currentError.name }}: {{ currentError.message }}
+            </div>
+        </div>
+    </div>
+</div>

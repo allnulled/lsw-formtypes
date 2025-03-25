@@ -1,7 +1,9 @@
 <div class="lsw_duration_control lsw_formtype lsw_form_control">
     <lsw-control-label :settings="settings"
         :parent-formtype="this" />
-    <div v-show="isEditable">
+    <lsw-error-viewer v-if="validateError" :error="validateError" />
+    <lsw-error-viewer v-if="submitError" :error="submitError" />
+    <div v-show="isEditable" v-else>
         <div ref="controller"
             v-xform.control="{
             name: settings.name,

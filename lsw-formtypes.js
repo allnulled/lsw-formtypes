@@ -355,7 +355,7 @@ Vue.component("LswDateControl", {
       isEditable: true,
       isShowingCalendar: false,
       respectivePlaceholder,
-      formMode: this.settings?.column.isFormSubtype || false,
+      formMode: this.settings?.column?.isFormSubtype || this.mode || "datetime",
     };
   },
   methods: {
@@ -388,11 +388,11 @@ Vue.component("LswDateControl", {
       this.$trace("lsw-date-control.methods.setValueFromCalendar");
       console.log("Valor:", v);
       const value = LswTimer.utils.formatDatestringFromDate(v);
-      if(this.mode === "datetime") {
+      if(this.formMode === "datetime") {
         this.value = value;
-      } else if(this.mode === "date") {
+      } else if(this.formMode === "date") {
         this.value = value.split(" ")[0];
-      } else if(this.mode === "time") {
+      } else if(this.formMode === "time") {
         this.value = value.split(" ")[1];
       } else {
         this.value = value;
@@ -412,7 +412,9 @@ Vue.component("LswDurationControl", {
   template: `<div class="lsw_duration_control lsw_formtype lsw_form_control">
     <lsw-control-label :settings="settings"
         :parent-formtype="this" />
-    <div v-show="isEditable">
+    <lsw-error-viewer v-if="validateError" :error="validateError" />
+    <lsw-error-viewer v-if="submitError" :error="submitError" />
+    <div v-show="isEditable" v-else>
         <div ref="controller"
             v-xform.control="{
             name: settings.name,
@@ -452,21 +454,28 @@ Vue.component("LswDurationControl", {
       value: this.settings?.initialValue || "",
       isEditable: true,
       isShowingDetails: false,
+      submitError: false,
+      validateError: false,
     };
   },
   methods: {
     async submit() {
-      this.$trace("lsw-duration-control.methods.submit");
-      return LswFormtypes.utils.submitControl.call(this);
-      
-    },
-    async submit() {
       this.$trace("lsw-text-control.methods.submit");
-      return LswFormtypes.utils.submitControl.call(this);
+      try {
+        return LswFormtypes.utils.submitControl.call(this);
+      } catch (error) {
+        this.submitError = error;
+        throw error;
+      }
     },
     validate() {
       this.$trace("lsw-text-control.methods.validateSettings");
-      return LswFormtypes.utils.validateControl.call(this);
+      try {
+        return LswFormtypes.utils.validateControl.call(this);
+      } catch (error) {
+        this.validateError = error;
+        throw error;
+      }
     },
     validateSettings() {
       this.$trace("lsw-text-control.methods.validateSettings");

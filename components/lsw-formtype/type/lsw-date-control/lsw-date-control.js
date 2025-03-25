@@ -21,7 +21,7 @@ Vue.component("LswDateControl", {
       isEditable: true,
       isShowingCalendar: false,
       respectivePlaceholder,
-      formMode: this.settings?.column.isFormSubtype || false,
+      formMode: this.settings?.column?.isFormSubtype || this.mode || "datetime",
     };
   },
   methods: {
@@ -54,11 +54,11 @@ Vue.component("LswDateControl", {
       this.$trace("lsw-date-control.methods.setValueFromCalendar");
       console.log("Valor:", v);
       const value = LswTimer.utils.formatDatestringFromDate(v);
-      if(this.mode === "datetime") {
+      if(this.formMode === "datetime") {
         this.value = value;
-      } else if(this.mode === "date") {
+      } else if(this.formMode === "date") {
         this.value = value.split(" ")[0];
-      } else if(this.mode === "time") {
+      } else if(this.formMode === "time") {
         this.value = value.split(" ")[1];
       } else {
         this.value = value;
