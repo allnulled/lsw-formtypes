@@ -500,12 +500,13 @@ Vue.component("LswLongTextControl", {
             }
         }">
             <div class="flex_row">
-                <textarea class="flex_100"
+                <textarea class="flex_100 nowrap"
                     type="text"
                     v-model="value"
                     v-on="settings?.input?.events || {}"
                     v-bind="settings?.input?.props || {}"
                     v-xform.input="{name: '*'}"
+                    spellcheck="false"
                     ref="textInput" />
             </div>
             <lsw-control-error />
